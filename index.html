@@ -81,13 +81,13 @@
       menu.style.display = "none"; // Hide menu on click anywhere
     });
     function createRecord(table, body){
-      fetch("https://ugw.nevaanmitt.workers.dev/createrecord/" + table, {
+      fetch("https://ugw.nevaanmitt.workers.dev/createRecord/" + table, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)}).then(response => response.json()).then(data => console.log("Record created:", data)).catch(error => console.error("Error:", error));
     }
     function updateRecord(table, body, id){
-      fetch("https://ugw.nevaanmitt.workers.dev/updaterecord/" + table, {
+      fetch("https://ugw.nevaanmitt.workers.dev/updateRecord/" + table, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({"id":id, "fields": body})
