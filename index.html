@@ -1,8 +1,116 @@
-<html>
-  <head>
-    <title>SIGMA</title>
-  </head>
-  <body>
-    <h1>SKIBIDI</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+  content="default-src 'self';
+           script-src 'self' https://code.jquery.com https://cdnjs.cloudflare.com 'unsafe-inline';
+           connect-src 'self' https://ugw.nevaanmitt.workers.dev;
+           style-src 'self' 'unsafe-inline';">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <title>Secure Account Storage</title>
+  <style>
+    .context-menu {
+      position: absolute;
+      background: lightgreen;
+      border: 1px solid #0000ff;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+      transition: display 1s ease;
+    }
+    .context-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .context-menu li {
+      padding: 8px 12px;
+      cursor: pointer !important;
+      font-size: 0.8em;
+      white-space: nowrap;
+      transition: background-color 0.2s ease;
+    }
+    .context-menu li:hover {
+      background-color: darkgreen;
+      cursor: pointer !important;
+    }
+    body {
+      text-align: center;
+      background-color: #025342;
+      cursor: pointer;
+    }
+    #title {
+      color: brown;
+      background: transparent;
+    }
+    p {
+      color: #036453;
+    }
+    h2 {
+      color: #7cfc00;
+    }
+  </style>
+</head>
+<body>
+  <input id="title" value="UNBLOCKED GAMES 2" style="width:350px; height:50px; font-size:2em; border-width:0px;">
+  <p>Click to edit</p>
+  <div id="custom-menu" class="context-menu">
+    <ul>
+      <li onclick="window.location.href='index.html'">HOME</li>
+      <li onclick="window.location.href='add.html'">ADD GAME</li>
+      <li onclick="window.location.href='special.html'">SPECIAL GAMES</li>
+      <li onclick="window.location.href">PERMISSIONS(DO NOT CLICK)</li>
+    </ul>
+  </div>
+  <script>
+    setInterval(function () {
+      document.title = $("#title").val();
+    }, 100);
+    
+    
+    const menu = document.getElementById("custom-menu");
+    document.addEventListener("contextmenu", (event) => {
+      event.preventDefault(); // Prevent default right-click menu
+      menu.style.top = `${event.pageY}px`;
+      menu.style.left = `${event.pageX}px`;
+      menu.style.display = "block";
+    });
+    document.addEventListener("click", () => {
+      menu.style.display = "none"; // Hide menu on click anywhere
+    });
+    function createRecord(table, body){
+      fetch("https://ugw.nevaanmitt.workers.dev/createrecord/" + table, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)}).then(response => response.json()).then(data => console.log("Record created:", data)).catch(error => console.error("Error:", error));
+    }
+    function updateRecord(table, body, id){
+      fetch("https://ugw.nevaanmitt.workers.dev/updaterecord/" + table, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({"id":id, "fields": body})
+      })
+        .then(response => response.json())
+        .then(data => console.log("Record updated:", data))
+        .catch(error => console.error("Error:", error));
+    }
+    function deleteRecord(table, id){
+      fetch("https://ugw.nevaanmitt.workers.dev/deleteRecord/" + table, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({"id": id})
+      });
+    }
+    function readRecords(table){
+      var dt
+      fetch("https://ugw.nevaanmitt.workers.dev/readRecords/TableName")
+        .then(res => res.json())
+        .then(data => dt=data);
+      return dt;
+    }
+    createRecord("accounts", {"username": "ertgh", "password": "qwert", "special": false, "admin": true, "ask": false, "ban": true});
+  </script>
+</body>
 </html>
