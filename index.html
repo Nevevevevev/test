@@ -65,52 +65,28 @@
     </ul>
   </div>
   <script>
-    setInterval(function () {
-      document.title = $("#title").val();
-    }, 100);
-    
-    
-    const menu = document.getElementById("custom-menu");
-    document.addEventListener("contextmenu", (event) => {
-      event.preventDefault(); // Prevent default right-click menu
-      menu.style.top = `${event.pageY}px`;
-      menu.style.left = `${event.pageX}px`;
-      menu.style.display = "block";
+    const airtablePat = import.meta.env.VITE_AIRTABLE_PAT;
+    const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
+    const tableName = 'accounts';
+
+    // Construct the Airtable API URL
+    const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+
+    // Make an API request with the PAT for authorization
+    fetch(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${airtablePat}`,
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error("error fetching Airtable data:", error);
     });
-    document.addEventListener("click", () => {
-      menu.style.display = "none"; // Hide menu on click anywhere
-    });
-    function createRecord(table, body){
-      fetch("https://ugw.nevaanmitt.workers.dev/createRecord/" + table, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)}).then(response => response.json()).then(data => console.log("Record created:", data)).catch(error => console.error("Error:", error));
-    }
-    function updateRecord(table, body, id){
-      fetch("https://ugw.nevaanmitt.workers.dev/updateRecord/" + table, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({"id":id, "fields": body})
-      })
-        .then(response => response.json())
-        .then(data => console.log("Record updated:", data))
-        .catch(error => console.error("Error:", error));
-    }
-    function deleteRecord(table, id){
-      fetch("https://ugw.nevaanmitt.workers.dev/deleteRecord/" + table, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({"id": id})
-      });
-    }
-    function readRecords(table){
-      var dt
-      fetch("https://ugw.nevaanmitt.workers.dev/readRecords/TableName")
-        .then(res => res.json())
-        .then(data => dt=data);
-      return dt;
-    }
-    createRecord("accounts", {"username": "ertgh", "password": "qwert", "special": false, "admin": true, "ask": false, "ban": true});
+
+
   </script>
 </body>
 </html>
